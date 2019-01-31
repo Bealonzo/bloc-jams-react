@@ -12,7 +12,8 @@ constructor(props) {
   this.state = {
     album: album,
     currentSong: album.songs[0],
-    isPlaying: false
+    isPlaying: false,
+    hovered: null
     };
 
 this.audioElement = document.createElement('audio');
@@ -45,6 +46,24 @@ pause() {
      }
    }
 
+   mouseEnter(song) {
+     this.setState( {hovered: song} );
+  }
+
+  mouseLeave() {
+  	this.setState( {hovered: null });
+  }
+   renderButton(song, index) {
+   	if (this.state.isPlaying && song === this.state.currentSong) {
+   		return <span className='icon ion-md-pause'></span>;
+   	} else if (song === this.state.hovered) {
+   		return <span className='icon ion-md-play'></span>;
+   	} else {
+   		return index+1;
+   }
+ }
+
+
    render() {
      return (
        <section className="album">
@@ -72,8 +91,9 @@ pause() {
 
         {
       		this.state.album.songs.map( (song, index) =>
-        		<tr className="song"key={index += 1}  onClick={() => this.handleSongClick(song)}>
-        		  <td>{index}</td>
+        		<tr className="song"key={index}   onClick={() => this.handleSongClick(song)} onMouseEnter={() => this.mouseEnter(song)} onMouseLeave={() => this.mouseLeave()} >
+        		  <td>{this.renderButton(song, index)}</td>
+
         		  <td>{song.title}</td>
         			<td>{song.duration} seconds</td>
         			</tr>
