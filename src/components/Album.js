@@ -90,6 +90,7 @@ componentWillUnmount() {
   mouseLeave() {
   	this.setState( {hovered: null });
   }
+
    renderButton(song, index) {
    	if (this.state.isPlaying && song === this.state.currentSong) {
    		return <span className='icon ion-md-pause'></span>;
@@ -106,6 +107,12 @@ componentWillUnmount() {
       this.audioElement.currentTime = newTime;
       this.setState({ currentTime: newTime });
     }
+
+handleVolumeChange(e) {
+  this.audioElement.volume = e.target.value
+	this.setState({volume: e.target.value})
+}
+
    render() {
      return (
        <section className="album">
@@ -153,6 +160,7 @@ componentWillUnmount() {
         handlePrevClick={() => this.handlePrevClick()}
         handleNextClick={() => this.handleNextClick()}
         handleTimeChange={(e) => this.handleTimeChange(e)}
+        handleVolumeChange={(e) => this.handleVolumeChange(e)}
       />
     </section>
      );
