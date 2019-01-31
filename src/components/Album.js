@@ -22,6 +22,20 @@ constructor(props) {
 this.audioElement = document.createElement('audio');
 this.audioElement.src =album.songs[0].audioSrc;
 
+
+
+}
+
+formatTime(toFormat) {
+ 	const minutes = Math.floor(toFormat / 60);
+ 	const seconds = Math.round(toFormat % 60);
+if (seconds < 10 ) {
+ 	return minutes + ':0' + seconds;
+} else if (isNaN(toFormat)) {
+	return '-:--';
+} else {
+	return minutes + ':' + seconds;
+}
 }
 
 play() {
@@ -90,6 +104,7 @@ componentWillUnmount() {
   mouseLeave() {
   	this.setState( {hovered: null });
   }
+
    renderButton(song, index) {
    	if (this.state.isPlaying && song === this.state.currentSong) {
    		return <span className='icon ion-md-pause'></span>;
@@ -106,6 +121,12 @@ componentWillUnmount() {
       this.audioElement.currentTime = newTime;
       this.setState({ currentTime: newTime });
     }
+
+handleVolumeChange(e) {
+  this.audioElement.volume = e.target.value
+	this.setState({volume: e.target.value})
+}
+
    render() {
      return (
        <section className="album">
@@ -137,7 +158,7 @@ componentWillUnmount() {
         		  <td>{this.renderButton(song, index)}</td>
 
         		  <td>{song.title}</td>
-        			<td>{song.duration} seconds</td>
+        		<td>{this.formatTime(song.duration)}</td>
         			</tr>
         		)
         }
@@ -149,10 +170,12 @@ componentWillUnmount() {
         currentSong={this.state.currentSong}
         currentTime={this.audioElement.currentTime}
         duration={this.audioElement.duration}
+        formatTime={(toFormat) => this.formatTime(toFormat)}
         handleSongClick={() => this.handleSongClick(this.state.currentSong)}
         handlePrevClick={() => this.handlePrevClick()}
         handleNextClick={() => this.handleNextClick()}
         handleTimeChange={(e) => this.handleTimeChange(e)}
+        handleVolumeChange={(e) => this.handleVolumeChange(e)}
       />
     </section>
      );
